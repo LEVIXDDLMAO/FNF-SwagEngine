@@ -70,16 +70,12 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			false);
 		addOption(option);
 
-		/*var option:Option = new Option('Note Delay',
-			'Changes how late a note is spawned.\nUseful for preventing audio lag from wireless earphones.',
-			'noteOffset',
-			'int',
-			0);
-		option.displayFormat = '%vms';
-		option.scrollSpeed = 100;
-		option.minValue = 0;
-		option.maxValue = 500;
-		addOption(option);*/
+		var option:Option = new Option('Display MS Offset On Note Hits',
+			'If checked, a offset (in ms) will appear near notes',
+			'showMsText',
+			'bool',
+			false);
+		addOption(option);
 
 		var option:Option = new Option('Rating Offset',
 			'Changes how late/early you have to hit for a "Sick!"\nHigher values mean you have to hit later.',

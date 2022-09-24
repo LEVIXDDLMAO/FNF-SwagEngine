@@ -223,6 +223,12 @@ class PlayState extends MusicBeatState
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 
+	var allNotesMs:Float = 0;
+	var averageMs:Float = 0;
+	
+	var msTimeTxt:FlxText;
+	var msTimeTxtTween:FlxTween;
+
 	var judgementCounter:FlxText;
 
 	public static var campaignScore:Int = 0;
@@ -880,6 +886,14 @@ class PlayState extends MusicBeatState
 		add(timeTxt);
 		timeBarBG.sprTracker = timeBar;
 
+		msTimeTxt = new FlxText(0, 0, 400, "", 32);
+		msTimeTxt.setFormat(Paths.font('vcr.ttf'), 32, 0xFFAC75FF, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		msTimeTxt.scrollFactor.set();
+		msTimeTxt.alpha = 0;
+		msTimeTxt.visible = true;
+		msTimeTxt.borderSize = 2;
+		add(msTimeTxt);		
+
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		add(strumLineNotes);
 		add(grpNoteSplashes);
@@ -1042,6 +1056,7 @@ class PlayState extends MusicBeatState
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
 		judgementCounter.cameras = [camHUD];
+		msTimeTxt.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		timeBar.cameras = [camHUD];
 		timeBarBG.cameras = [camHUD];
@@ -1149,6 +1164,7 @@ class PlayState extends MusicBeatState
 		RecalculateRating();
 
 		//PRECACHING MISS SOUNDS BECAUSE I THINK THEY CAN LAG PEOPLE AND FUCK THEM UP IDK HOW HAXE WORKS
+		if(ClientPrefs.hitsoundVolume > 0) CoolUtil.precacheSound('hitsound', 'sound');
 		CoolUtil.precacheSound('missnote1');
 		CoolUtil.precacheSound('missnote2');
 		CoolUtil.precacheSound('missnote3');
@@ -1499,6 +1515,21 @@ class PlayState extends MusicBeatState
 			callOnLuas('onCountdownStarted', []);
 
 			var swagCounter:Int = 0;
+
+			if (ClientPrefs.showMsText) {
+				if (ClientPrefs.downScroll) {
+					msTimeTxt.x = playerStrums.members[1].x-100;
+					msTimeTxt.y = playerStrums.members[1].y+100;
+				} else {
+					msTimeTxt.x = playerStrums.members[1].x-100;
+					msTimeTxt.y = playerStrums.members[1].y-50;
+				}
+
+				if (ClientPrefs.middleScroll) {
+					msTimeTxt.x = playerStrums.members[0].x-250;
+					msTimeTxt.y = playerStrums.members[1].y+30;
+				}
+			}
 
 			startTimer = new FlxTimer().start(Conductor.crochet / 1000, function(tmr:FlxTimer)
 			{
@@ -3256,6 +3287,18 @@ class PlayState extends MusicBeatState
 	private function popUpScore(note:Note = null):Void
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset);
+		allNotesMs += noteDiff;
+		averageMs = allNotesMs/songHits;
+		if (ClientPrefs.showMsText) {
+			msTimeTxt.alpha = 1;
+			msTimeTxt.text =Std.string(Math.round(noteDiff)) + "ms";
+			if (msTimeTxtTween != null){
+				msTimeTxtTween.cancel(); msTimeTxtTween.destroy(); // top 10 awesome code
+			}
+			msTimeTxtTween = FlxTween.tween(msTimeTxt, {alpha: 0}, 0.25, {
+				onComplete: function(tw:FlxTween) {msTimeTxtTween = null;}, startDelay: 0.7
+			});
+		}
 		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
 
 		// boyfriend.playAnim('hey');
@@ -3777,6 +3820,11 @@ class PlayState extends MusicBeatState
 		if (!note.wasGoodHit)
 		{
 			if(cpuControlled && (note.ignoreNote || note.hitCausesMiss)) return;
+
+			if (ClientPrefs.hitsoundVolume > 0 && !note.hitsoundDisabled)
+			{
+				FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+			}
 
 			if(note.hitCausesMiss) {
 				noteMiss(note);
