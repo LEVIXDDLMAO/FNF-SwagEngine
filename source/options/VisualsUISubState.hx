@@ -80,6 +80,19 @@ class VisualsUISubState extends BaseOptionsMenu
 		var option:Option = new Option('Show Judgement Counter', "If checked, will show Judgement Counters at the left side of the screen.", 'judgCounter', 'bool', true);
 		addOption(option);
 
+		var option:Option = new Option('Hitsound Volume',
+		'Funny notes does \"Tick!\" when you hit them."',
+		'hitsoundVolume',
+		'percent',
+		0);
+		addOption(option);
+		option.scrollSpeed = 1.6;
+		option.minValue = 0.0;
+		option.maxValue = 1;
+		option.changeValue = 0.1;
+		option.decimals = 1;
+		option.onChange = onChangeHitsoundVolume;
+
 		var option:Option = new Option('Health Bar Transparency',
 			'How much transparent should the health bar and icons be.',
 			'healthBarAlpha',
@@ -91,8 +104,7 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.changeValue = 0.1;
 		option.decimals = 1;
 		addOption(option);
-		
-		#if !mobile
+
 		var option:Option = new Option('FPS Counter',
 			'If unchecked, hides FPS Counter.',
 			'showFPS',
@@ -100,16 +112,18 @@ class VisualsUISubState extends BaseOptionsMenu
 			true);
 		addOption(option);
 		option.onChange = onChangeFPSCounter;
-		#end
 
 		super();
 	}
 
-	#if !mobile
+	function onChangeHitsoundVolume()
+	{
+		FlxG.sound.play(Paths.sound('hitsound'), ClientPrefs.hitsoundVolume);
+	}
+
 	function onChangeFPSCounter()
 	{
 		if(Main.fpsVar != null)
 			Main.fpsVar.visible = ClientPrefs.showFPS;
 	}
-	#end
 }

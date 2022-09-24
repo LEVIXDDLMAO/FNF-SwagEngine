@@ -24,6 +24,8 @@ class Note extends FlxSprite
 	public var noteWasHit:Bool = false;
 	public var prevNote:Note;
 
+	public var hitsoundDisabled:Bool = false;
+
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
 	public var noteType(default, set):String = null;
@@ -154,13 +156,12 @@ class Note extends FlxSprite
 			}
 		}
 
-		// trace(prevNote);
-
 		if (isSustainNote && prevNote != null)
 		{
 			alpha = 0.6;
 			multAlpha = 0.6;
 			if(ClientPrefs.downScroll) flipY = true;
+			hitsoundDisabled = true;
 
 			offsetX += width / 2;
 			copyAngle = false;
