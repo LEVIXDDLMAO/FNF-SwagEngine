@@ -7,7 +7,7 @@
 - the fc counter looks like [SFC]
 - hitsounds ( not of now )
 - HTML5 Support
-- a Kade engine Counter part ( me by my self again problay gonna be runing on 1.5.2 or 1.8 idk since 1.8 dosent work on html but i have ported it once i might do a newer version or maybe 1.5.2 )
+- a Kade engine Counter part: https://github.com/LEVIXDDLMAO/FNF-SwagEngine_KE
 - tons of updates
 - sponsers? ( for funked and this one :D )
 - custom notes ( Like Hanks bullet note and trickys EX note )
