@@ -48,7 +48,7 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.GameplaySettingsSubState());
 			case 'Adjust Delay and Combo':
 				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
-			case 'Editor'
+			case 'Editor':
 				MusicBeatState.switchState(new EditorPlayState());
 		}
 	}
