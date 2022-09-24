@@ -77,6 +77,9 @@ class VisualsUISubState extends BaseOptionsMenu
 			true);
 		addOption(option);
 
+		var option:Option = new Option('Show Judgement Counter', "If checked, will show Judgement Counters at the left side of the screen.", 'judgCounter', 'bool', true);
+		addOption(option);
+
 		var option:Option = new Option('Health Bar Transparency',
 			'How much transparent should the health bar and icons be.',
 			'healthBarAlpha',
