@@ -1,0 +1,25 @@
+{
+	"dialogue": [
+		{
+			"portrait": "gf",
+			"expression": "talk",
+			"text": "Hey! your super cute! Mind if i show you what to do?",
+			"boxState": "normal",
+			"speed": 0.05
+		},
+		{
+			"portrait": "bf",
+			"expression": "excited",
+			"text": "Wow such a hotie talking to a loser like me im so fucking blessed!! lets rock!",
+			"boxState": "normal",
+			"speed": 0.05
+		},
+		{
+			"portrait": "gf",
+			"expression": "talk",
+			"text": "okay! Lets start!",
+			"boxState": "normal",
+			"speed": 0.05
+		}
+	]
+}
