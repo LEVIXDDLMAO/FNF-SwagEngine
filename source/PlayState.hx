@@ -2221,9 +2221,9 @@ class PlayState extends MusicBeatState
 		super.update(elapsed);
 
 		if(ratingName == '?') {
-			scoreTxt.text = 'Swag Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Rating: ' + ratingName;
+			scoreTxt.text = 'Swag Score: ' + songScore + ' // Combo Breaks: ' + songMisses + ' // Rating: ' + ratingName;
 		} else {
-			scoreTxt.text = 'Swag Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
+			scoreTxt.text = 'Swag Score: ' + songScore + ' // Combo Breaks: ' + songMisses + ' // Rating: ' + ratingName + ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC;//peeps wanted no integer rating
 		}
 
 		if(botplayTxt.visible) {
