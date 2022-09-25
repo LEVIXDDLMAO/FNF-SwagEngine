@@ -3683,7 +3683,7 @@ class PlayState extends MusicBeatState
 		});
 		combo = 0;
 
-		if (note.noteType == 'Day3Bullets') {
+		if (daNote.noteType == 'Day3Bullets') {
 			if(boyfriend.animation.getByName('hurt') != null) {
 				boyfriend.playAnim('hurt', true);
 				boyfriend.specialAnim = true;
@@ -3716,7 +3716,7 @@ class PlayState extends MusicBeatState
 		if(char.hasMissAnimations)
 		{
 			var daAlt = '';
-			if(daNote.noteType == 'Alt Animation' || note.noteType == 'Day3Bullets') daAlt = '-alt';
+			if(daNote.noteType == 'Alt Animation' || daNote.noteType == 'Day3Bullets') daAlt = '-alt';
 
 			var animToPlay:String = singAnimations[Std.int(Math.abs(daNote.noteData))] + 'miss' + daAlt;
 			char.playAnim(animToPlay, true);
