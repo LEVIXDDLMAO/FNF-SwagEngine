@@ -81,6 +81,7 @@ class CreditsState extends MusicBeatState
 		var pisspoop:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			['Swag Engine Team'],
 			['LeviXD',              'levixd', 		'Main Programmer of Swag Engine',						'https://github.com/LEVIXDDLMAO',	'444444'], //no bitches?
+			['MemeHoovy',           'memehoovy',        "Helps on Swag Engine :D You got to be on here twice",                                      'https://twitter.com/meme_hoovy',      'C30085'],
 			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer of Psych Engine',								'https://twitter.com/Shadow_Mario_',	'444444'],
@@ -98,6 +99,7 @@ class CreditsState extends MusicBeatState
 			['Cool people!'],
             ['MemeHoovy',           'memehoovy',        "Made MemeHoovy Engine and my best friend",                                      'https://twitter.com/meme_hoovy',      'C30085'],
 			['EliteMasterEric',		'mastereric',		'this man noticed me ',										'https://twitter.com/EliteMasterEric',	'FFBD40'],
+			['Corruption Takeover Team', 'E', 'made all of the Corruption Sprite', 'https://gamejolt.com/games/fnfctakeover/730925', '444444'],
 			[''],
 			["Funkin' Crew"],
 			['ninjamuffin99',		'ninjamuffin99',	"Programmer of Friday Night Funkin'",					'https://twitter.com/ninja_muffin99',	'F73838'],
