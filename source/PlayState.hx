@@ -2090,11 +2090,6 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		/*if (FlxG.keys.justPressed.NINE)
-		{
-			iconP1.swapOldIcon();
-		}*/
-
 		callOnLuas('onUpdate', [elapsed]);
 
 		switch (curStage)
@@ -2500,9 +2495,6 @@ class PlayState extends MusicBeatState
 						goodNoteHit(daNote);
 					}
 				}
-
-				// WIP interpolation shit? Need to fix the pause issue
-				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * songSpeed));
 
 				var doKill:Bool = daNote.y < -daNote.height;
 				if(ClientPrefs.downScroll) doKill = daNote.y > FlxG.height;
@@ -3691,6 +3683,15 @@ class PlayState extends MusicBeatState
 		});
 		combo = 0;
 
+		if (note.noteType == 'Day3Bullets') {
+			if(boyfriend.animation.getByName('hurt') != null) {
+				boyfriend.playAnim('hurt', true);
+				boyfriend.specialAnim = true;
+			}
+			FlxG.sound.play(Paths.sound('shoot'));
+			FlxG.camera.shake(0.01,0.1);
+		}
+
 		health -= daNote.missHealth * healthLoss;
 		if(instakillOnMiss)
 		{
@@ -3715,7 +3716,7 @@ class PlayState extends MusicBeatState
 		if(char.hasMissAnimations)
 		{
 			var daAlt = '';
-			if(daNote.noteType == 'Alt Animation') daAlt = '-alt';
+			if(daNote.noteType == 'Alt Animation' || note.noteType == 'Day3Bullets') daAlt = '-alt';
 
 			var animToPlay:String = singAnimations[Std.int(Math.abs(daNote.noteData))] + 'miss' + daAlt;
 			char.playAnim(animToPlay, true);
@@ -3852,6 +3853,16 @@ class PlayState extends MusicBeatState
 					note.destroy();
 				}
 				return;
+			} else {
+				switch (note.noteType){
+					case 'Day3Bullets':
+						/*if (boyfriend.animation.getByName('dodge') != null){
+							boyfriend.playAnim('dodge', true);
+							boyfriend.specialAnim = true;
+						}*/
+						FlxG.sound.play(Paths.sound('shoot'));
+						FlxG.camera.shake(0.01,0.1);
+				}
 			}
 
 			if (!note.isSustainNote)
@@ -3864,7 +3875,7 @@ class PlayState extends MusicBeatState
 
 			if(!note.noAnimation) {
 				var daAlt = '';
-				if(note.noteType == 'Alt Animation') daAlt = '-alt';
+				if(note.noteType == 'Alt Animation' || note.noteType == 'Day3Bullets') daAlt = '-alt';
 	
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
 
