@@ -2301,6 +2301,10 @@ class PlayState extends MusicBeatState
 			else
 				iconP1.animation.curAnim.curFrame = 0;
 		}
+		else if (iconP1.animation.frames == 1)
+		{
+			iconP1.animation.curAnim.curFrame = 0;
+		}	
 
 		if (iconP2.animation.frames == 3)
 		{
@@ -2317,6 +2321,10 @@ class PlayState extends MusicBeatState
 				iconP2.animation.curAnim.curFrame = 1;
 			else
 				iconP2.animation.curAnim.curFrame = 0;
+		}
+		else if(iconP2.animation.frames == 1)
+		{
+			iconP2.animation.curAnim.curFrame = 0;
 		}
 
 		if (FlxG.keys.anyJustPressed(debugKeysCharacter) && !endingSong && !inCutscene) {
