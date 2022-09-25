@@ -101,7 +101,7 @@ class Note extends FlxSprite
 						missHealth = 0.3;
 					}
 					hitCausesMiss = true;
-				case 'Day3Bullets'
+				case 'Day3Bullets':
 					ignoreNote = false;
 					reloadNote('BULLET');
 					noteSplashDisabled = true;
