@@ -284,6 +284,10 @@ class PlayState extends MusicBeatState
 
 	public var seWatermark:FlxText;
 
+	var bullet:FlxSprite;
+
+	var bulletSpeed:Float = 0;
+
 	override public function create()
 	{
 		#if MODS_ALLOWED
@@ -1061,6 +1065,15 @@ class PlayState extends MusicBeatState
 			botplayTxt.y = timeBarBG.y - 78;
 		}
 
+		//And this is for Swag Engine
+		seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
+		seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		seWatermark.scrollFactor.set();
+		seWatermark.visible = ClientPrefs.showWatermarks;
+		add(seWatermark);
+
+		seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
+
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
 		notes.cameras = [camHUD];
@@ -1076,6 +1089,7 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+		seWatermark.cameras = [camHUD];
 
 		startingSong = true;
 
@@ -1498,16 +1512,6 @@ class PlayState extends MusicBeatState
 
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
-
-	//And this is for Swag Engine
-	seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
-	seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-	seWatermark.scrollFactor.set();
-	seWatermark.visible = ClientPrefs.showWatermarks;
-	add(seWatermark);
-
-	seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
-
 
 	// For being able to mess with the sprites on Lua
 	public var countdownReady:FlxSprite;
