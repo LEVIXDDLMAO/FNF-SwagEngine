@@ -282,6 +282,8 @@ class PlayState extends MusicBeatState
 		"dodgeCooldown" => 0.102
 	];
 
+	public var seWatermark:FlxText;
+
 	override public function create()
 	{
 		#if MODS_ALLOWED
@@ -1497,14 +1499,14 @@ class PlayState extends MusicBeatState
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
 
-        //And this is for Swag Engine
-		seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
-		seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		seWatermark.scrollFactor.set();
-		seWatermark.visible = ClientPrefs.showWatermarks;
-		add(seWatermark);
+	//And this is for Swag Engine
+	seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
+	seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+	seWatermark.scrollFactor.set();
+	seWatermark.visible = ClientPrefs.showWatermarks;
+	add(seWatermark);
 
-		seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
+	seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
 
 
 	// For being able to mess with the sprites on Lua
