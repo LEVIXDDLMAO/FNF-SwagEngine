@@ -284,7 +284,6 @@ class PlayState extends MusicBeatState
 	];
 
 	public var seWatermark:FlxText;
-	var seWatermark:FlxText;
 
 	var bullet:FlxSprite;
 
