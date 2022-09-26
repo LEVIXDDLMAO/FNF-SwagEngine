@@ -277,16 +277,11 @@ class PlayState extends MusicBeatState
 
 	public var dodgeEnabled:Bool = true;
 
-	final dodgeInfo:Map<String, Float> = [
-		"dodgeTime" => 0.222,
-		"dodgeCooldown" => 0.102
-	];
-
 	public var seWatermark:FlxText;
 
-	var bullet:FlxSprite;
+	var detectAttack:Bool = false;
 
-	var bulletSpeed:Float = 0;
+	var kb_attack_alert:FlxSprite;
 
 	override public function create()
 	{
@@ -910,7 +905,7 @@ class PlayState extends MusicBeatState
 		msTimeTxt.alpha = 0;
 		msTimeTxt.visible = true;
 		msTimeTxt.borderSize = 2;
-		add(msTimeTxt);		
+		add(msTimeTxt);
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		add(strumLineNotes);
@@ -1071,6 +1066,21 @@ class PlayState extends MusicBeatState
 		seWatermark.scrollFactor.set();
 		seWatermark.visible = ClientPrefs.showWatermark;
 		add(seWatermark);
+
+		kb_attack_alert = new FlxSprite();
+		kb_attack_alert.frames = Paths.getSparrowAtlas('attack_alert_NEW');
+		kb_attack_alert.animation.addByPrefix('alert', 'kb_attack_animation_alert-single', 24, false);	
+		kb_attack_alert.animation.addByPrefix('alertDOUBLE', 'kb_attack_animation_alert-double', 24, false);	
+		kb_attack_alert.animation.addByPrefix('alertTRIPLE', 'kb_attack_animation_alert-triple', 24, false);	
+		kb_attack_alert.animation.addByPrefix('alertQUAD', 'kb_attack_animation_alert-quad', 24, false);	
+		kb_attack_alert.antialiasing = ClientPrefs.globalAntialiasing;
+		kb_attack_alert.setGraphicSize(Std.int(kb_attack_alert.width * 1.5));
+		kb_attack_alert.cameras = [camHUD];
+		kb_attack_alert.x = FlxG.width - 700;
+		kb_attack_alert.y = 205;
+		kb_attack_alert.alpha = 0.00001;
+		kb_attack_alert.offset.set(0,0);
+		add(kb_attack_alert);	
 
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -2118,6 +2128,11 @@ class PlayState extends MusicBeatState
 	{
 		callOnLuas('onUpdate', [elapsed]);
 
+		if (detectAttack)
+		{
+			detectSpace();
+		}
+
 		switch (curStage)
 		{
 			case 'schoolEvil':
@@ -2679,54 +2694,91 @@ class PlayState extends MusicBeatState
 		return pressed;
 	}
 
-	public function bullet_WARN(amount:Int = 0, playSound:Bool = true) {
-		switch(amount) {
-			default:
-				if (ClientPrefs.noteOffset <= 0){
-					if(playSound) FlxG.sound.play(Paths.sound('alert'), 1);
-					bullet_SHOOT(true,'shoot');
-				}
-				else {
-					new FlxTimer().start(ClientPrefs.noteOffset / 1000, function(tmr:FlxTimer){
-						bullet_SHOOT(true,'shoot');
-					});
-				}
+	// var pressCounter = 0;
+
+	public function bullet_WARN(playSound:Bool = true) {
+		kb_attack_alert.alpha = 1;
+		kb_attack_alert.animation.play('alert');
+		kb_attack_alert.animation.finishCallback = function(s:String){
+			kb_attack_alert.alpha = 0.00001;
+		}
+		if(playSound) FlxG.sound.play(Paths.sound('alert'));
+	}
+
+	var pressedSpace:Bool = false;
+
+	function bullet_FIRE()
+	{
+		trace('prepare to fire');
+		bullet_WARN(true);
+		pressedSpace = false;
+		detectAttack = true;
+		new FlxTimer().start(0.5, function(tmr:FlxTimer)
+		{
+			if (pressedSpace && bfCanDodge && !bfDodging)
+			{
+				bfDodge();
+				trace('Successful dodge');
+				FlxG.camera.shake(0.02, 0.02);
+				FlxG.sound.play(Paths.sound('dodge01'));
+			}
+			else
+			{
+				pressedSpace = false;
+				detectAttack = false;
+				dodgeFail();
+				trace('Haha, hit');
+			}
+		});
+	}
+
+	function detectSpace()
+	{
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			// pressCounter += 1;
+			trace('tap');
+			pressedSpace = true;
+			detectAttack = false;
 		}
 	}
 
-	function bullet_SHOOT(state:Bool = false, soundToPlay:String = 'shoot', ?instaKill:Bool = false){
-		if(state){
-			//Play attack animation
-			if (dad.animation.getByName('shoot') != null)
-				dad.playAnim('shoot');
-			FlxG.camera.shake(0.001675,0.6);
-			camHUD.shake(0.001675,0.2);
-			if(cpuControlled) bfDodge();
-			//Slight delay for animation. Yeah I know I should be doing this using curStep and curBeat and what not, but I'm lazy -Haz
-			new FlxTimer().start(0.09, function(tmr:FlxTimer)
-			{
-				if(!bfDodging){
-						if(instaKill){
-							//MURDER THE BITCH!
-							trace("failed to dodge");
-							doDeathCheck(true);
-						}else{
-							health -= 0.265;
-							//mmmmm I loved scuffed code.
-							if(health < 0.265){
-								doDeathCheck(true);
-							}
-							boyfriend.stunned=true;
-							if (boyfriend.animation.getByName('hurt') != null)
-								boyfriend.playAnim('hurt',true);
-							new FlxTimer().start(0.495, function(tmr:FlxTimer)
-							{
-								boyfriend.stunned=false;
-								//trace("Not fucked anymore?");
-							});
-					}
-				}
+	function dodgeFail()
+	{
+		new FlxTimer().start(0.05, function(tmr:FlxTimer)
+		{
+			if(boyfriend.animation.getByName('hurt') != null) {
+				boyfriend.playAnim('hurt', true);
+				boyfriend.specialAnim = true;
+			}
+			boyfriend.stunned = true;
+			new FlxTimer().start(0.03, function(sex:FlxTimer){
+				boyfriend.stunned = false;
 			});
+			// FlxG.sound.play(Paths.sound('shoot'));
+			if (health > 1)
+			{
+				health -= 0.4;
+			}
+			else
+			{
+				health -= 0.20;
+			}
+		});
+		FlxG.camera.shake(0.05, 0.05);
+	}
+
+	function bfDodge()
+	{
+		if (FlxG.keys.justPressed.SPACE)
+		{
+			if (boyfriend.animation.getByName('dodge') != null){
+				boyfriend.animation.play('dodge', true);
+				boyfriend.animation.finishCallback = function(s:String){
+					bfDodging=false;
+				}
+				bfDodging=true;
+			}
 		}
 	}
 
@@ -3066,7 +3118,7 @@ class PlayState extends MusicBeatState
 					});
 				}
 			case 'Bullet Dodge':
-			bullet_WARN(0,true);	
+			bullet_WARN(true);
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
@@ -3384,7 +3436,6 @@ class PlayState extends MusicBeatState
 		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		coolText.screenCenter();
 		coolText.x = FlxG.width * 0.35;
-		//
 
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
@@ -3687,37 +3738,14 @@ class PlayState extends MusicBeatState
 		return -1;
 	}
 
-	function bfDodge():Void{
-		bfDodging = true;
-		bfCanDodge = false;
-
-		if (boyfriend.animation.getByName('dodge') != null){
-			boyfriend.playAnim('dodge');
-		}	
-
-		FlxG.sound.play(Paths.sound('dodge01'));
-
-		new FlxTimer().start(dodgeInfo['dodgeTime'], function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
-		{
-			bfDodging=false;
-			boyfriend.dance();
-			//new FlxTimer().start(0.1135, function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
-			//new FlxTimer().start(0.1, function(tmr:FlxTimer) 		//UNCOMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
-			new FlxTimer().start(dodgeInfo['dodgeCooldown'], function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
-			{
-				bfCanDodge=true;
-			});
-		});
-	}	
-
 	// Hold notes
 	private function keyShit():Void
 	{
-		if (dodgeEnabled) {
+		/*if (dodgeEnabled) {
 			if(FlxG.keys.justPressed.SPACE && !bfDodging && bfCanDodge){
 				bfDodge();
 			}
-		}
+		}*/
 		// HOLDING
 		var up = controls.NOTE_UP;
 		var right = controls.NOTE_RIGHT;
