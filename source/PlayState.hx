@@ -281,6 +281,8 @@ class PlayState extends MusicBeatState
 
 	var detectAttack:Bool = false;
 
+	var kb_attack_alert:FlxSprite;
+
 	override public function create()
 	{
 		#if MODS_ALLOWED
@@ -903,7 +905,7 @@ class PlayState extends MusicBeatState
 		msTimeTxt.alpha = 0;
 		msTimeTxt.visible = true;
 		msTimeTxt.borderSize = 2;
-		add(msTimeTxt);		
+		add(msTimeTxt);
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		add(strumLineNotes);
@@ -1064,6 +1066,21 @@ class PlayState extends MusicBeatState
 		seWatermark.scrollFactor.set();
 		seWatermark.visible = ClientPrefs.showWatermark;
 		add(seWatermark);
+
+		kb_attack_alert = new FlxSprite();
+		kb_attack_alert.frames = Paths.getSparrowAtlas('attack_alert_NEW');
+		kb_attack_alert.animation.addByPrefix('alert', 'kb_attack_animation_alert-single', 24, false);	
+		kb_attack_alert.animation.addByPrefix('alertDOUBLE', 'kb_attack_animation_alert-double', 24, false);	
+		kb_attack_alert.animation.addByPrefix('alertTRIPLE', 'kb_attack_animation_alert-triple', 24, false);	
+		kb_attack_alert.animation.addByPrefix('alertQUAD', 'kb_attack_animation_alert-quad', 24, false);	
+		kb_attack_alert.antialiasing = ClientPrefs.globalAntialiasing;
+		kb_attack_alert.setGraphicSize(Std.int(kb_attack_alert.width * 1.5));
+		kb_attack_alert.cameras = [camHUD];
+		kb_attack_alert.x = FlxG.width - 700;
+		kb_attack_alert.y = 205;
+		kb_attack_alert.alpha = 0.00001;
+		kb_attack_alert.offset.set(0,0);
+		add(kb_attack_alert);	
 
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -2675,7 +2692,11 @@ class PlayState extends MusicBeatState
 	// var pressCounter = 0;
 
 	public function bullet_WARN(playSound:Bool = true) {
-		// pressCounter = 0;
+		kb_attack_alert.alpha = 1;
+		kb_attack_alert.animation.play('alert');
+		kb_attack_alert.animation.finishCallback = function(){
+			kb_attack_alert.alpha = 0.00001;
+		}
 		if(playSound) FlxG.sound.play(Paths.sound('alert'), 1);
 	}
 
@@ -2753,7 +2774,7 @@ class PlayState extends MusicBeatState
 		{
 			if (boyfriend.animation.getByName('dodge') != null){
 				boyfriend.animation.play('dodge', true);
-				boyfriend.animation.callback = function(){
+				boyfriend.animation.finishCallback = function(){
 					bfDodging=false;
 				}
 				bfDodging=true;
