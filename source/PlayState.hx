@@ -3624,7 +3624,9 @@ class PlayState extends MusicBeatState
 		bfDodging = true;
 		bfCanDodge = false;
 
-		boyfriend.playAnim('dodge');
+		if (boyfriend.animation.getByName('dodge') != null){
+			boyfriend.playAnim('dodge');
+		}	
 
 		FlxG.sound.play(Paths.sound('dodge01'));
 
