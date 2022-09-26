@@ -2717,7 +2717,7 @@ class PlayState extends MusicBeatState
 		{
 			if (pressedSpace && bfCanDodge && !bfDodging)
 			{
-				bfdodge();
+				bfDodge();
 				trace('Successful dodge');
 				FlxG.camera.shake(0.02, 0.02);
 				FlxG.sound.play(Paths.sound('dodge01'));
