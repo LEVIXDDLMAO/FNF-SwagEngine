@@ -3118,7 +3118,7 @@ class PlayState extends MusicBeatState
 					});
 				}
 			case 'Bullet Dodge':
-			bullet_WARN(0,true);	
+			bullet_WARN(true);
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}
