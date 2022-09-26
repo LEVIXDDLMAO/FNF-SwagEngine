@@ -270,6 +270,20 @@ class PlayState extends MusicBeatState
 	// Less laggy controls
 	private var keysArray:Array<Dynamic>;
 
+	// private var dodgeKey:Array<FlxKey>;
+
+	var bfDodging:Bool = false;
+	var bfCanDodge:Bool = false;
+
+	public var dodgeEnabled:Bool = true;
+
+	final dodgeInfo:Map<String, Float> = [
+		"dodgeTime" => 0.222,
+		"dodgeCooldown" => 0.102
+	];
+
+	public var seWatermark:FlxText;
+
 	override public function create()
 	{
 		#if MODS_ALLOWED
@@ -1485,14 +1499,14 @@ class PlayState extends MusicBeatState
 	var startTimer:FlxTimer;
 	var finishTimer:FlxTimer = null;
 
-        //And this is for Swag Engine
-		seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
-		seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		seWatermark.scrollFactor.set();
-		seWatermark.visible = ClientPrefs.showWatermarks;
-		add(seWatermark);
+	//And this is for Swag Engine
+	seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
+	seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+	seWatermark.scrollFactor.set();
+	seWatermark.visible = ClientPrefs.showWatermarks;
+	add(seWatermark);
 
-		seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
+	seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
 
 	// For being able to mess with the sprites on Lua
 	public var countdownReady:FlxSprite;
@@ -1551,7 +1565,7 @@ class PlayState extends MusicBeatState
 					gf.dance();
 				}
 				if(tmr.loopsLeft % 2 == 0) {
-					if (boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing'))
+					if (boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !bfDodging && !boyfriend.stunned)
 					{
 						boyfriend.dance();
 					}
@@ -2530,7 +2544,7 @@ class PlayState extends MusicBeatState
 		if (!inCutscene) {
 			if(!cpuControlled) {
 				keyShit();
-			} else if(boyfriend.holdTimer > Conductor.stepCrochet * 0.001 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
+			} else if(!bfDodging && !boyfriend.stunned && boyfriend.holdTimer > Conductor.stepCrochet * 0.001 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
 				boyfriend.dance();
 			}
 		}
@@ -3617,9 +3631,37 @@ class PlayState extends MusicBeatState
 		return -1;
 	}
 
+	function bfDodge():Void{
+		bfDodging = true;
+		bfCanDodge = false;
+
+		if (boyfriend.animation.getByName('dodge') != null){
+			boyfriend.playAnim('dodge');
+		}	
+
+		FlxG.sound.play(Paths.sound('dodge01'));
+
+		new FlxTimer().start(dodgeInfo['dodgeTime'], function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+		{
+			bfDodging=false;
+			boyfriend.dance();
+			//new FlxTimer().start(0.1135, function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+			//new FlxTimer().start(0.1, function(tmr:FlxTimer) 		//UNCOMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+			new FlxTimer().start(dodgeInfo['dodgeCooldown'], function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+			{
+				bfCanDodge=true;
+			});
+		});
+	}	
+
 	// Hold notes
 	private function keyShit():Void
 	{
+		if (dodgeEnabled) {
+			if(FlxG.keys.anyJustPressed(SPACE) && !bfDodging && bfCanDodge){
+				bfDodge();
+			}
+		}
 		// HOLDING
 		var up = controls.NOTE_UP;
 		var right = controls.NOTE_RIGHT;
@@ -3761,16 +3803,6 @@ class PlayState extends MusicBeatState
 			RecalculateRating();
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
-			// FlxG.log.add('played imss note');
-
-			/*boyfriend.stunned = true;
-
-			// get stunned for 1/60 of a second, makes you able to
-			new FlxTimer().start(1 / 60, function(tmr:FlxTimer)
-			{
-				boyfriend.stunned = false;
-			});*/
 
 			if(boyfriend.hasMissAnimations) {
 				boyfriend.playAnim(singAnimations[Std.int(Math.abs(direction))] + 'miss', true);
