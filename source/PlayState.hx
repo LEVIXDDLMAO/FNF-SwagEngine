@@ -2755,7 +2755,7 @@ class PlayState extends MusicBeatState
 			new FlxTimer().start(0.03, function(sex:FlxTimer){
 				boyfriend.stunned = false;
 			});
-			FlxG.sound.play(Paths.sound('shoot', 0.75);
+			FlxG.sound.play(Paths.sound('shoot', 0.75));
 			if (health > 1)
 			{
 				health -= 0.4;
