@@ -2699,7 +2699,7 @@ class PlayState extends MusicBeatState
 	public function bullet_WARN(playSound:Bool = true) {
 		kb_attack_alert.alpha = 1;
 		kb_attack_alert.animation.play('alert');
-		kb_attack_alert.animation.finishCallback = function(){
+		kb_attack_alert.animation.finishCallback = function(s:String){
 			kb_attack_alert.alpha = 0.00001;
 		}
 		if(playSound) FlxG.sound.play(Paths.sound('alert'), 1);
@@ -2774,7 +2774,7 @@ class PlayState extends MusicBeatState
 		{
 			if (boyfriend.animation.getByName('dodge') != null){
 				boyfriend.animation.play('dodge', true);
-				boyfriend.animation.finishCallback = function(){
+				boyfriend.animation.finishCallback = function(s:String){
 					bfDodging=false;
 				}
 				bfDodging=true;
