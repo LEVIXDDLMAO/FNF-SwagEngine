@@ -222,7 +222,6 @@ class PlayState extends MusicBeatState
 	public var scoreTxt:FlxText;
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
-	var seWatermark:FlxText;
 
 	var allNotesMs:Float = 0;
 	var averageMs:Float = 0;
@@ -284,7 +283,6 @@ class PlayState extends MusicBeatState
 	];
 
 	public var seWatermark:FlxText;
-	var seWatermark:FlxText;
 
 	var bullet:FlxSprite;
 
@@ -1086,7 +1084,6 @@ class PlayState extends MusicBeatState
 		scoreTxt.cameras = [camHUD];
 		judgementCounter.cameras = [camHUD];
 		msTimeTxt.cameras = [camHUD];
-		seWatermark.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		timeBar.cameras = [camHUD];
 		timeBarBG.cameras = [camHUD];
