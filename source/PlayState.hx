@@ -1089,7 +1089,6 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
-		seWatermark.cameras = [camHUD];
 
 		startingSong = true;
 
