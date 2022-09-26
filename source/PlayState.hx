@@ -270,6 +270,18 @@ class PlayState extends MusicBeatState
 	// Less laggy controls
 	private var keysArray:Array<Dynamic>;
 
+	// private var dodgeKey:Array<FlxKey>;
+
+	var bfDodging:Bool = false;
+	var bfCanDodge:Bool = false;
+
+	public var dodgeEnabled:Bool = true;
+
+	final dodgeInfo:Map<String, Float> = [
+		"dodgeTime" => 0.222,
+		"dodgeCooldown" => 0.102
+	];
+
 	override public function create()
 	{
 		#if MODS_ALLOWED
@@ -1542,7 +1554,7 @@ class PlayState extends MusicBeatState
 					gf.dance();
 				}
 				if(tmr.loopsLeft % 2 == 0) {
-					if (boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing'))
+					if (boyfriend.animation.curAnim != null && !boyfriend.animation.curAnim.name.startsWith('sing') && !bfDodging && !boyfriend.stunned)
 					{
 						boyfriend.dance();
 					}
@@ -2521,7 +2533,7 @@ class PlayState extends MusicBeatState
 		if (!inCutscene) {
 			if(!cpuControlled) {
 				keyShit();
-			} else if(boyfriend.holdTimer > Conductor.stepCrochet * 0.001 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
+			} else if(!bfDodging && !boyfriend.stunned && boyfriend.holdTimer > Conductor.stepCrochet * 0.001 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
 				boyfriend.dance();
 			}
 		}
@@ -3608,9 +3620,35 @@ class PlayState extends MusicBeatState
 		return -1;
 	}
 
+	function bfDodge():Void{
+		bfDodging = true;
+		bfCanDodge = false;
+
+		boyfriend.playAnim('dodge');
+
+		FlxG.sound.play(Paths.sound('dodge01'));
+
+		new FlxTimer().start(dodgeInfo['dodgeTime'], function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+		{
+			bfDodging=false;
+			boyfriend.dance();
+			//new FlxTimer().start(0.1135, function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+			//new FlxTimer().start(0.1, function(tmr:FlxTimer) 		//UNCOMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+			new FlxTimer().start(dodgeInfo['dodgeCooldown'], function(tmr:FlxTimer) 	//COMMENT THIS IF YOU WANT TO USE DOUBLE SAW VARIATIONS!
+			{
+				bfCanDodge=true;
+			});
+		});
+	}	
+
 	// Hold notes
 	private function keyShit():Void
 	{
+		if (dodgeEnabled) {
+			if(FlxG.keys.anyJustPressed(SPACE) && !bfDodging && bfCanDodge){
+				bfDodge();
+			}
+		}
 		// HOLDING
 		var up = controls.NOTE_UP;
 		var right = controls.NOTE_RIGHT;
