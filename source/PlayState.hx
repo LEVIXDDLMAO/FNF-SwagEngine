@@ -1066,13 +1066,11 @@ class PlayState extends MusicBeatState
 		}
 
 		//And this is for Swag Engine
-		seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
+		seWatermark = new FlxText(0, FlxG.height - 24, 0, "Swag Engine: v" + MainMenuState.swagengineVersion, 16);
 		seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		seWatermark.scrollFactor.set();
 		seWatermark.visible = ClientPrefs.showWatermark;
 		add(seWatermark);
-
-		seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
 
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -1089,6 +1087,7 @@ class PlayState extends MusicBeatState
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
+		seWatermark.cameras = [camHUD];
 
 		startingSong = true;
 
