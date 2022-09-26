@@ -2702,7 +2702,7 @@ class PlayState extends MusicBeatState
 		kb_attack_alert.animation.finishCallback = function(s:String){
 			kb_attack_alert.alpha = 0.00001;
 		}
-		if(playSound) FlxG.sound.play(Paths.sound('alert'), 1);
+		if(playSound) FlxG.sound.play(Paths.sound('alert'));
 	}
 
 	var pressedSpace:Bool = false;
@@ -2720,7 +2720,7 @@ class PlayState extends MusicBeatState
 				bfdodge();
 				trace('Successful dodge');
 				FlxG.camera.shake(0.02, 0.02);
-				FlxG.sound.play(Paths.sound('dodge01', 0.8));
+				FlxG.sound.play(Paths.sound('dodge01'));
 			}
 			else
 			{
@@ -2755,7 +2755,7 @@ class PlayState extends MusicBeatState
 			new FlxTimer().start(0.03, function(sex:FlxTimer){
 				boyfriend.stunned = false;
 			});
-			FlxG.sound.play(Paths.sound('shoot', 0.75));
+			// FlxG.sound.play(Paths.sound('shoot'));
 			if (health > 1)
 			{
 				health -= 0.4;
