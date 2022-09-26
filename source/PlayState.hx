@@ -1493,7 +1493,6 @@ class PlayState extends MusicBeatState
 		add(seWatermark);
 
 		seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
-       }
 
 	// For being able to mess with the sprites on Lua
 	public var countdownReady:FlxSprite;
