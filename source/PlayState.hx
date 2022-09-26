@@ -2128,6 +2128,11 @@ class PlayState extends MusicBeatState
 	{
 		callOnLuas('onUpdate', [elapsed]);
 
+		if (detectAttack)
+		{
+			detectSpace();
+		}
+
 		switch (curStage)
 		{
 			case 'schoolEvil':
@@ -2701,11 +2706,6 @@ class PlayState extends MusicBeatState
 	}
 
 	var pressedSpace:Bool = false;
-
-	if (detectAttack)
-	{
-		detectSpace();
-	}
 
 	function bullet_FIRE()
 	{
