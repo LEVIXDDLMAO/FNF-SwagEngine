@@ -1069,7 +1069,7 @@ class PlayState extends MusicBeatState
 		seWatermark = new FlxText(0, FlxG.height - 24, 0, "", 16);
 		seWatermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		seWatermark.scrollFactor.set();
-		seWatermark.visible = ClientPrefs.showWatermarks;
+		seWatermark.visible = ClientPrefs.showWatermark;
 		add(seWatermark);
 
 		seWatermark.text = "Swag Engine: v" + MainMenuState.swagengineVersion;
@@ -2699,7 +2699,7 @@ class PlayState extends MusicBeatState
 		if(state){
 			//Play attack animation
 			if (dad.animation.getByName('shoot') != null)
-				dad.animation.playAnim('shoot');
+				dad.playAnim('shoot');
 			FlxG.camera.shake(0.001675,0.6);
 			camHUD.shake(0.001675,0.2);
 			if(cpuControlled) bfDodge();
@@ -3715,7 +3715,7 @@ class PlayState extends MusicBeatState
 	private function keyShit():Void
 	{
 		if (dodgeEnabled) {
-			if(FlxG.keys.anyJustPressed(SPACE) && !bfDodging && bfCanDodge){
+			if(FlxG.keys.justPressed.SPACE && !bfDodging && bfCanDodge){
 				bfDodge();
 			}
 		}
