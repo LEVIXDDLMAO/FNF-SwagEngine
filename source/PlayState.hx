@@ -2681,6 +2681,57 @@ class PlayState extends MusicBeatState
 		return pressed;
 	}
 
+	public function bullet_WARN(amount:Int = 0, playSound:Bool = true) {
+		switch(amount) {
+			default:
+				if (ClientPrefs.noteOffset <= 0){
+					if(playSound) FlxG.sound.play(Paths.sound('alert'), 1);
+					bullet_SHOOT(true,'shoot');
+				}
+				else {
+					new FlxTimer().start(ClientPrefs.noteOffset / 1000, function(tmr:FlxTimer){
+						bullet_SHOOT(true,'shoot');
+					});
+				}
+		}
+	}
+
+	function bullet_SHOOT(state:Bool = false, soundToPlay:String = 'shoot', ?instaKill:Bool = false){
+		if(state){
+			//Play attack animation
+			if (dad.animation.getByName('shoot') != null)
+				dad.animation.playAnim('shoot');
+			FlxG.camera.shake(0.001675,0.6);
+			camHUD.shake(0.001675,0.2);
+			if(cpuControlled) bfDodge();
+			//Slight delay for animation. Yeah I know I should be doing this using curStep and curBeat and what not, but I'm lazy -Haz
+			new FlxTimer().start(0.09, function(tmr:FlxTimer)
+			{
+				if(!bfDodging){
+						if(instaKill){
+							//MURDER THE BITCH!
+							trace("failed to dodge");
+							doDeathCheck(true);
+						}else{
+							health -= 0.265;
+							//mmmmm I loved scuffed code.
+							if(health < 0.265){
+								doDeathCheck(true);
+							}
+							boyfriend.stunned=true;
+							if (boyfriend.animation.getByName('hurt') != null)
+								boyfriend.playAnim('hurt',true);
+							new FlxTimer().start(0.495, function(tmr:FlxTimer)
+							{
+								boyfriend.stunned=false;
+								//trace("Not fucked anymore?");
+							});
+					}
+				}
+			});
+		}
+	}
+
 	public function triggerEventNote(eventName:String, value1:String, value2:String) {
 		switch(eventName) {
 			case 'Hey!':
@@ -3016,6 +3067,8 @@ class PlayState extends MusicBeatState
 						}
 					});
 				}
+			case 'Bullet Dodge':
+			bullet_WARN(0,true);	
 		}
 		callOnLuas('onEvent', [eventName, value1, value2]);
 	}

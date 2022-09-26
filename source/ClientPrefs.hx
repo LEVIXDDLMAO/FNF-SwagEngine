@@ -31,6 +31,7 @@ class ClientPrefs {
 	public static var judgCounter:Bool = true;
 	public static var hitsoundVolume:Float = 0;
 	public static var showMsText:Bool = true;
+	public static var showWatermark:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'songspeed' => 1.0,
@@ -108,6 +109,7 @@ class ClientPrefs {
 		FlxG.save.data.judgCounter = judgCounter;
 		FlxG.save.data.hitsoundVolume = hitsoundVolume;
 		FlxG.save.data.showMsText = showMsText;
+		FlxG.save.data.showWatermark = showWatermark;
 
 		FlxG.save.data.ratingOffset = ratingOffset;
 		FlxG.save.data.sickWindow = sickWindow;
@@ -222,6 +224,9 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.showMsText != null) {
 			showMsText = FlxG.save.data.showMsText;
+		}
+		if(FlxG.save.data.showWatermark != null) {
+			showWatermark = FlxG.save.data.showWatermark;
 		}
 		if(FlxG.save.data.gameplaySettings != null)
 		{
