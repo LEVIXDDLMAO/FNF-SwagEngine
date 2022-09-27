@@ -39,6 +39,7 @@ class MainMenuState extends MusicBeatState
 		'awards',
 		'credits',
 		'options'
+        #if !switch 'donate', #end
 	];
 
 	var magenta:FlxSprite;
