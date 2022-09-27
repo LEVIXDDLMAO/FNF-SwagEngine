@@ -273,7 +273,7 @@ class PlayState extends MusicBeatState
 	// private var dodgeKey:Array<FlxKey>;
 
 	var bfDodging:Bool = false;
-	var bfCanDodge:Bool = false;
+	var bfCanDodge:Bool = true;
 
 	public var dodgeEnabled:Bool = true;
 
@@ -2745,26 +2745,16 @@ class PlayState extends MusicBeatState
 
 	function dodgeFail()
 	{
-		new FlxTimer().start(0.05, function(tmr:FlxTimer)
-		{
-			if(boyfriend.animation.getByName('hurt') != null) {
-				boyfriend.playAnim('hurt', true);
-				boyfriend.specialAnim = true;
-			}
-			boyfriend.stunned = true;
-			new FlxTimer().start(0.03, function(sex:FlxTimer){
-				boyfriend.stunned = false;
-			});
-			// FlxG.sound.play(Paths.sound('shoot'));
-			if (health > 1)
-			{
-				health -= 0.4;
-			}
-			else
-			{
-				health -= 0.20;
-			}
+		if(boyfriend.animation.getByName('hurt') != null) {
+			boyfriend.playAnim('hurt', true);
+			boyfriend.specialAnim = true;
+		}
+		boyfriend.stunned = true;
+		new FlxTimer().start(0.03, function(sex:FlxTimer){
+			boyfriend.stunned = false;
 		});
+		// FlxG.sound.play(Paths.sound('shoot'));
+		health -= 0.20;
 		FlxG.camera.shake(0.05, 0.05);
 	}
 
