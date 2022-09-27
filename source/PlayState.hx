@@ -2726,18 +2726,7 @@ class PlayState extends MusicBeatState
 			{
 				pressedSpace = false;
 				detectAttack = false;
-				// just put them in the same place
-				if(boyfriend.animation.getByName('hurt') != null) {
-					boyfriend.playAnim('hurt', true);
-					boyfriend.specialAnim = true;
-				}
-				boyfriend.stunned = true;
-				new FlxTimer().start(0.03, function(sex:FlxTimer){
-					boyfriend.stunned = false;
-				});
-				// FlxG.sound.play(Paths.sound('shoot'));
-				health -= 0.20;
-				FlxG.camera.shake(0.05, 0.05);
+				dodgeFail();
 				trace('Haha, hit');
 			}
 		});
@@ -2752,6 +2741,21 @@ class PlayState extends MusicBeatState
 			pressedSpace = true;
 			detectAttack = false;
 		}
+	}
+
+	function dodgeFail()
+	{
+		if(boyfriend.animation.getByName('hurt') != null) {
+			boyfriend.playAnim('hurt', true);
+			boyfriend.specialAnim = true;
+		}
+		boyfriend.stunned = true;
+		new FlxTimer().start(0.03, function(sex:FlxTimer){
+			boyfriend.stunned = false;
+		});
+		// FlxG.sound.play(Paths.sound('shoot'));
+		health -= 0.20;
+		FlxG.camera.shake(0.05, 0.05);
 	}
 
 	function bfDodge()
