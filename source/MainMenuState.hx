@@ -25,7 +25,7 @@ using StringTools;
 
 class MainMenuState extends MusicBeatState
 {
-	public static var swagengineVersion:String = '0.2.5'; //This is also used for Discord RPC
+	public static var swagengineVersion:String = '0.3.5'; //This is also used for Discord RPC
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
