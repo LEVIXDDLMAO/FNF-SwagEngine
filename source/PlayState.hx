@@ -256,6 +256,7 @@ class PlayState extends MusicBeatState
 	var keysPressed:Array<Bool> = [];
 	var boyfriendIdleTime:Float = 0.0;
 	var boyfriendIdled:Bool = false;
+	var tauntCounter:Int = 0;
 
 	// Lua shit
 	public static var instance:PlayState;
@@ -993,6 +994,8 @@ class PlayState extends MusicBeatState
 			prevCamFollowPos = null;
 		}
 		add(camFollowPos);
+		
+		tauntCounter = 0;
 
 		FlxG.camera.follow(camFollowPos, LOCKON, 1);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
@@ -2697,6 +2700,16 @@ class PlayState extends MusicBeatState
 				}
 		}
 	}
+
+	FlxG.keys.justPressed.SHIFT
+	if(!inhumanSong && FlxG.keys.anyJustPressed(tauntKey) && !bfDodging && !controlHoldArray.contains(true) && !boyfriend.animation.curAnim.name.endsWith('miss') && boyfriend.specialAnim == false){
+				boyfriend.playAnim('hey', true);
+				boyfriend.specialAnim = true;
+				boyfriend.heyTimer = 0.59;
+				FlxG.sound.play(Paths.sound('hey'));
+				tauntCounter++;
+				trace("taunts: ",tauntCounter);
+			}
 
 	function bullet_SHOOT(state:Bool = false, soundToPlay:String = 'shoot', ?instaKill:Bool = false){
 		if(state){
