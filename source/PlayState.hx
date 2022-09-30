@@ -2701,15 +2701,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	FlxG.keys.justPressed.SHIFT
-	if(!inhumanSong && FlxG.keys.anyJustPressed(tauntKey) && !bfDodging && !controlHoldArray.contains(true) && !boyfriend.animation.curAnim.name.endsWith('miss') && boyfriend.specialAnim == false){
-				boyfriend.playAnim('hey', true);
-				boyfriend.specialAnim = true;
-				boyfriend.heyTimer = 0.59;
-				FlxG.sound.play(Paths.sound('hey'));
-				tauntCounter++;
-				trace("taunts: ",tauntCounter);
-			}
 
 	function bullet_SHOOT(state:Bool = false, soundToPlay:String = 'shoot', ?instaKill:Bool = false){
 		if(state){
