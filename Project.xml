@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 
-	<app title="Friday Night Funkin' Swag Engine" file="SwagEngine" packageName="com.levixd.swagengine" package="com.levixdswagengine" main="Main" version="0.2.7" company="Swag" />
+	<app title="Friday Night Funkin' Swag Engine" file="SwagEngine" packageName="com.levixd.swagengine" package="com.levixdswagengine" main="Main" version="0.5.1" company="Swag" />
 
 	<!-- NOTE TO SELF: DISABLE THIS IF ISSUES ARE FOUND -->
 	<haxedef name="LINC_LUA_RELATIVE_DYNAMIC_LIB"/> <!-- stable luas PUT AFTER FIRST LINE WITH APP NAME AND ETC -->
