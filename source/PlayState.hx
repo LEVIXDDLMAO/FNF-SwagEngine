@@ -270,7 +270,8 @@ class PlayState extends MusicBeatState
 	// Less laggy controls
 	private var keysArray:Array<Dynamic>;
 
-	// private var dodgeKey:Array<FlxKey>;
+	private var dodgeKey:Array<FlxKey>;
+	private var tauntKey:Array<FlxKey>;
 
 	var bfDodging:Bool = false;
 	var bfCanDodge:Bool = false;
@@ -278,8 +279,8 @@ class PlayState extends MusicBeatState
 	public var dodgeEnabled:Bool = true;
 
 	final dodgeInfo:Map<String, Float> = [
-		"dodgeTime" => 0.222,
-		"dodgeCooldown" => 0.102
+		"dodgeTime" => 0.22625,
+		"dodgeCooldown" => 0.1135
 	];
 
 	public var seWatermark:FlxText;
@@ -299,6 +300,9 @@ class PlayState extends MusicBeatState
 
 		debugKeysChart = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_1'));
 		debugKeysCharacter = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('debug_2'));
+
+		dodgeKey = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('qt_dodge'));
+		tauntKey = ClientPrefs.copyKey(ClientPrefs.keyBinds.get('qt_taunt'));
 
 		keysArray = [
 			ClientPrefs.copyKey(ClientPrefs.keyBinds.get('note_left')),
